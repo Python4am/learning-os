@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>五维学习作战系统 v2 · 粤语×游泳×摄影×后期×英语</title>
+<style>
+:root{
+  --bg:#f6f7f9; --card:#ffffff; --ink:#1c2333; --sub:#6b7484; --line:#e6e9ef;
+  --cantonese:#e8572a; --swim:#0e8fd6; --photo:#7c5cbf; --edit:#d6336c; --eng:#0f9d6c;
+  --gold:#e6a817; --shadow:0 1px 3px rgba(20,30,60,.06),0 6px 18px rgba(20,30,60,.05);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+.wrap{max-width:1060px;margin:0 auto;padding:20px 16px 80px}
+/* header */
+.hero{background:linear-gradient(135deg,#1c2333 0%,#2c3a5e 100%);color:#fff;border-radius:18px;padding:26px 28px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(230,168,23,.25),transparent 70%)}
+.hero h1{font-size:24px;letter-spacing:1px}
+.hero .sub{opacity:.75;font-size:13px;margin-top:4px}
+.hero-stats{display:flex;gap:26px;margin-top:18px;flex-wrap:wrap}
+.hstat .n{font-size:26px;font-weight:700}
+.hstat .l{font-size:12px;opacity:.7}
+/* banner */
+.banner{border-radius:12px;padding:12px 16px;margin-bottom:14px;font-size:13.5px;display:none;align-items:center;gap:10px}
+.banner.warn{display:flex;background:#fdf3e3;border:1px solid #f0d9a8;color:#8a6414}
+.banner.good{display:flex;background:#e8f7f0;border:1px solid #bfe6d4;color:#0f7a52}
+/* tabs */
+.tabs{display:flex;gap:8px;margin:20px 0 16px;flex-wrap:wrap}
+.tab{padding:9px 18px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:14px;cursor:pointer;color:var(--sub);transition:.15s;user-select:none}
+.tab.active{background:var(--ink);color:#fff;border-color:var(--ink);font-weight:600}
+/* cards */
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:14px;box-shadow:var(--shadow)}
+.card h3{font-size:16px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+/* time blocks */
+.tblock{border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden;background:#fff}
+.tblock .tb-head{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;user-select:none}
+.tblock .tb-time{font-size:12px;color:var(--sub);background:var(--bg);border-radius:6px;padding:2px 8px;white-space:nowrap}
+.tblock .tb-title{font-weight:600;font-size:15px}
+.tblock .tb-now{margin-left:auto;font-size:11px;color:#fff;background:var(--gold);border-radius:999px;padding:2px 10px;display:none}
+.tblock.now{border-color:var(--gold);box-shadow:0 0 0 2px rgba(230,168,23,.18)}
+.tblock.now .tb-now{display:inline-block}
+.task{display:flex;gap:10px;padding:10px 16px;border-top:1px dashed var(--line);align-items:flex-start}
+.task input{margin-top:6px;width:17px;height:17px;accent-color:var(--ink);cursor:pointer;flex-shrink:0}
+.task .t-body{flex:1;font-size:14px}
+.task.done .t-body{color:#a8b0bd;text-decoration:line-through}
+.tag{display:inline-block;font-size:11px;border-radius:4px;padding:0 6px;margin-right:6px;color:#fff;font-weight:600;vertical-align:1px}
+.t-cantonese{background:var(--cantonese)}.t-swim{background:var(--swim)}.t-photo{background:var(--photo)}.t-edit{background:var(--edit)}.t-eng{background:var(--eng)}.t-sys{background:#5a6478}
+.tip{font-size:12px;color:var(--sub);padding:6px 16px 12px;border-top:1px dashed var(--line);background:#fbfbfd}
+.fallback{font-size:12px;color:#8a6414;padding:8px 16px 10px;border-top:1px dashed #f0d9a8;background:#fffaf0}
+/* progress ring */
+.daybar{display:flex;align-items:center;gap:16px}
+.ring{transform:rotate(-90deg)}
+.ring .bgc{stroke:var(--line)}
+.ring .fgc{stroke:var(--gold);stroke-linecap:round;transition:stroke-dashoffset .5s}
+/* toast */
+#toast{position:fixed;left:50%;bottom:44px;transform:translateX(-50%) translateY(30px);background:var(--ink);color:#fff;padding:12px 22px;border-radius:999px;font-size:14px;opacity:0;transition:.35s;pointer-events:none;z-index:99;box-shadow:0 8px 30px rgba(0,0,0,.25);max-width:88vw;text-align:center}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* roadmap */
+.domain-head{display:flex;align-items:center;gap:10px;margin:22px 0 10px}
+.domain-head .dot{width:12px;height:12px;border-radius:4px}
+.domain-head h3{font-size:17px}
+.domain-head .goal{font-size:12px;color:var(--sub)}
+.weekgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.week{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#fff;font-size:13px}
+.week .wk{font-size:11px;font-weight:700;color:var(--sub);letter-spacing:.5px}
+.week .wt{font-weight:700;margin:2px 0 4px}
+.week .wd{color:var(--sub);font-size:12.5px;line-height:1.55}
+.week.cur{border-color:var(--gold);box-shadow:0 0 0 2px rgba(230,168,23,.2)}
+.week.cur .wk{color:var(--gold)}
+.week.past{opacity:.55}
+/* srs */
+.srs-add{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.srs-add select,.srs-add input{padding:9px 12px;border:1px solid var(--line);border-radius:8px;font-size:13px;font-family:inherit}
+.srs-add input{flex:1;min-width:160px}
+button.act{padding:9px 18px;border:none;border-radius:8px;background:var(--ink);color:#fff;font-size:13px;cursor:pointer;font-family:inherit}
+button.act:hover{opacity:.85}
+.srs-item{border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:8px;background:#fff}
+.srs-item .sf{font-size:14.5px;font-weight:600}
+.srs-item .sn{font-size:12.5px;color:var(--sub);margin-top:3px;white-space:pre-wrap}
+.srs-item .ops{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap}
+.srs-item .ops button{padding:5px 14px;font-size:12px;border-radius:6px;border:1px solid var(--line);background:#fff;cursor:pointer;font-family:inherit}
+.srs-item .ops .ok{background:var(--eng);color:#fff;border-color:var(--eng)}
+.srs-item .ops .mid{background:var(--gold);color:#fff;border-color:var(--gold)}
+.srs-item .ops .bad{background:#d64545;color:#fff;border-color:#d64545}
+.srs-meta{font-size:11px;color:var(--sub);margin-left:6px}
+/* guide */
+details{border:1px solid var(--line);border-radius:10px;background:#fff;margin-bottom:8px;overflow:hidden}
+summary{padding:12px 16px;cursor:pointer;font-weight:600;font-size:14px;list-style:none;display:flex;align-items:center;gap:8px;user-select:none}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"＋";margin-left:auto;color:var(--sub);font-weight:400}
+details[open] summary::after{content:"－"}
+details .body{padding:0 16px 14px;font-size:13.5px;color:#39404f}
+details .body li{margin:4px 0 4px 18px}
+details .body b{color:var(--ink)}
+details .body table{border-collapse:collapse;margin:6px 0;font-size:12.5px;width:100%}
+details .body th,details .body td{border:1px solid var(--line);padding:5px 8px;text-align:left}
+details .body th{background:var(--bg)}
+.pill{display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:1px 8px;font-size:12px;margin:2px 3px 2px 0;color:#39404f}
+.copybox{background:#1c2333;color:#d5f5e3;border-radius:8px;padding:12px 14px;font-size:12.5px;margin:6px 0;white-space:pre-wrap;font-family:ui-monospace,Consolas,monospace;line-height:1.55}
+button.cp{padding:4px 12px;font-size:12px;border-radius:6px;border:none;background:var(--eng);color:#fff;cursor:pointer;font-family:inherit;margin:4px 0}
+/* review */
+.rev-q{margin-bottom:14px}
+.rev-q label{font-size:13.5px;font-weight:600;display:block;margin-bottom:5px}
+.rev-q textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 12px;font-size:13px;font-family:inherit;min-height:64px;resize:vertical}
+.rev-hist{font-size:13px;border-top:1px dashed var(--line);padding:10px 0}
+.rev-hist .rh-w{font-weight:700;font-size:12px;color:var(--sub)}
+footer{margin-top:26px;text-align:center;font-size:12px;color:var(--sub)}
+.mini{font-size:12px;color:var(--sub)}
+.scigrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.sci{border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff;font-size:13px}
+.sci b{font-size:13.5px}
+.sci p{color:var(--sub);font-size:12.5px;margin-top:3px}
+@media(max-width:640px){.hero h1{font-size:19px}.weekgrid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <h1>五维学习作战系统 <span style="font-size:13px;opacity:.6">v2</span></h1>
+    <div class="sub">粤语 · 游泳 · 摄影 · 后期 · 英语口语 ｜ 主动提取 × 间隔重复 × 交错练习 × 费曼 × 睡眠巩固 × 福格行为模型</div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="n" id="stDay">1</div><div class="l">第几天 / 共90天</div></div>
+      <div class="hstat"><div class="n" id="stWeek">1</div><div class="l">当前周 / 共12周</div></div>
+      <div class="hstat"><div class="n" id="stStreak">0</div><div class="l">连续打卡 🔥</div></div>
+      <div class="hstat"><div class="n" id="stDone">0%</div><div class="l">今日完成率</div></div>
+      <div class="hstat"><div class="n" id="stSrs">0</div><div class="l">今日待复习</div></div>
+    </div>
+  </div>
+
+  <div class="tabs" style="margin-top:20px">
+    <div class="tab active" data-tab="today">📋 今日作战</div>
+    <div class="tab" data-tab="road">🗺 90天路线图</div>
+    <div class="tab" data-tab="srs">🧠 间隔复习</div>
+    <div class="tab" data-tab="guide">📚 攻略武器库</div>
+    <div class="tab" data-tab="review">🪞 每周复盘</div>
+  </div>
+
+  <!-- TODAY -->
+  <div id="tab-today">
+    <div class="banner warn" id="missBanner">⚠️ <b>昨天断档了。</b>铁律「绝不错过两次」：今天不求全做完，先把每个时间块的<b>保底版</b>做掉，守住连续。</div>
+    <div class="banner good" id="okBanner">✅ 连续记录保持中。今天的目标不是完美，是<b>不断档</b>。</div>
+    <div class="card">
+      <div class="daybar">
+        <svg class="ring" width="64" height="64"><circle class="bgc" cx="32" cy="32" r="26" fill="none" stroke-width="7"/><circle class="fgc" id="ringFg" cx="32" cy="32" r="26" fill="none" stroke-width="7" stroke-dasharray="163.4" stroke-dashoffset="163.4"/></svg>
+        <div>
+          <div style="font-weight:700" id="todayTitle"></div>
+          <div class="mini" id="todaySub"></div>
+        </div>
+      </div>
+    </div>
+    <div id="todayBlocks"></div>
+    <div class="card">
+      <h3>🌙 睡前仪式（23:00前，约10分钟）</h3>
+      <div class="mini" style="margin-bottom:8px">睡前1小时不摄入新内容——只做轻复习，把巩固交给睡眠（慢波睡眠搬运记忆，REM睡眠建立连接）。睡够7-8小时，是学习的后半段工程。</div>
+      <div id="bedTasks"></div>
+    </div>
+  </div>
+
+  <!-- ROADMAP -->
+  <div id="tab-road" style="display:none"></div>
+
+  <!-- SRS -->
+  <div id="tab-srs" style="display:none">
+    <div class="card">
+      <h3>🧠 间隔重复复习中心</h3>
+      <div class="mini" style="margin-bottom:10px">海马体只把「在多个时间点被需要过」的信息转存长期记忆。把每天学到的最小知识块（一句粤语、一个词块、一个参数结论）录进来，系统按 <b>1天 → 3天 → 7天 → 21天 → 60天</b> 自动排期。复习时<b>先回忆再对照</b>，不是重看。</div>
+      <div class="srs-add">
+        <select id="srsDomain">
+          <option value="cantonese">粤语</option><option value="eng">英语</option>
+          <option value="photo">摄影</option><option value="edit">后期</option><option value="swim">游泳</option>
+        </select>
+        <input id="srsFront" placeholder="知识块（越小越好），如：唔该 = 谢谢/劳驾">
+        <input id="srsNote" placeholder="补充/例句（可先空着，回忆后对照用）">
+        <button class="act" onclick="addSrs()">＋ 录入</button>
+      </div>
+      <h3 style="margin-top:6px">📥 今日到期 <span class="srs-meta" id="srsDueCount"></span></h3>
+      <div id="srsDue"></div>
+      <h3 style="margin-top:16px">🗄 全部记忆库 <span class="srs-meta" id="srsAllCount"></span></h3>
+      <div id="srsAll"></div>
+    </div>
+  </div>
+
+  <!-- GUIDE -->
+  <div id="tab-guide" style="display:none">
+    <div class="card">
+      <h3>⚗️ 科学发动机（学习方法 × 行为设计）</h3>
+      <div class="scigrid">
+        <div class="sci"><b>1. 主动提取</b><p>大脑不存储你输入了什么，只存储你主动提取了什么。每学15分钟，合上材料默写/口述5分钟，再对照补漏。</p></div>
+        <div class="sci"><b>2. 间隔重复</b><p>1天→3天→7天→21天→60天。任务不是阻止遗忘，是在遗忘边缘再提取一次。用「间隔复习」页自动排期。</p></div>
+        <div class="sci"><b>3. 睡眠巩固</b><p>白天学的，夜里由慢波睡眠搬运进皮层、REM睡眠建立连接。睡前1小时不学新内容，睡不够6小时第二天工作记忆掉40%。</p></div>
+        <div class="sci"><b>4. 交错练习</b><p>晚间摄影+后期交替练、语言材料每周换主题。短期正确率会降，两周后判断速度明显变快。</p></div>
+        <div class="sci"><b>5. 费曼技巧</b><p>每晚一个卡点：不用术语讲清楚→找断裂点→补漏→重讲。循环3次。流畅背诵≠理解。</p></div>
+        <div class="sci"><b>6. 最小知识块</b><p>工作记忆只有4-7个槽位。每条笔记只写一件事、写「原理」不抄「定义」。</p></div>
+        <div class="sci"><b>7. 福格行为模型 B=MAP</b><p>行为=动机×能力×提示。动机最不可靠，别靠意志力——把行为缩到「小到不可能失败」（保底版），绑定旧习惯做锚点（早餐后→跟读），完成后立刻庆祝。</p></div>
+        <div class="sci"><b>8. 绝不错过两次</b><p>断档一天是意外，断档两天是新（坏）习惯的开始。再忙也要做保底版：1分钟也算打卡，连续记录比单次强度重要。</p></div>
+      </div>
+    </div>
+    <div id="guideContent"></div>
+  </div>
+
+  <!-- REVIEW -->
+  <div id="tab-review" style="display:none">
+    <div class="card">
+      <h3>🪞 每周复盘 <span class="srs-meta" id="revWeekLabel"></span></h3>
+      <div class="mini" style="margin-bottom:12px">每周日晚10分钟。复盘不是总结流水账，而是找断裂点、调下周策略。</div>
+      <div class="rev-q"><label>1️⃣ 本周五域各完成了几天？哪一域掉队了？（看打卡）</label><textarea id="rq1" placeholder="例：粤语7天全勤；游泳只去了1次，因为……"></textarea></div>
+      <div class="rev-q"><label>2️⃣ 本周最大的一个突破（具体写出来）</label><textarea id="rq2" placeholder="例：自由泳第一次连续50m没停 / shadowing不用看稿跟上了"></textarea></div>
+      <div class="rev-q"><label>3️⃣ 费曼测试：不用术语，讲清本周一个知识点。卡在哪？</label><textarea id="rq3" placeholder="讲不下去的地方就是下周要补的洞"></textarea></div>
+      <div class="rev-q"><label>4️⃣ 下周一个调整动作（只写一个，可执行）</label><textarea id="rq4" placeholder="例：游泳改到早上人少时段 / 英语素材从BBC换成EnglishPod"></textarea></div>
+      <button class="act" onclick="saveReview()">💾 保存本周复盘</button>
+    </div>
+    <div class="card"><h3>🗂 历史复盘</h3><div id="revHist"></div></div>
+  </div>
+
+  <footer>
+    <div>数据保存在本机浏览器（localStorage），建议每周导出备份：
+    <a href="javascript:exportData()" style="color:var(--ink)">导出数据</a> ·
+    <a href="javascript:importData()" style="color:var(--ink)">导入数据</a> ·
+    <a href="javascript:resetStart()" style="color:#b04a4a">重置开始日期</a></div>
+    <div style="margin-top:6px">「让行为小到不可能失败，让成功立刻被感受到。」— 福格行为模型</div>
+  </footer>
+</div>
+<div id="toast"></div>
+
+<script>
+/* ============ 12周课程数据（源自全网攻略蒸馏） ============ */
+const DOMS = {
+  cantonese:{name:"粤语",cls:"t-cantonese",color:"var(--cantonese)",slot:"早晨语言块 · 20分钟",goal:"12周：日常场景听说自由，无字幕看懂80%粤语短视频",
+    weeks:[
+    ["粤拼地基","声母韵母总览；六调感知：跟读「诗si1 史si2 试si3 时si4 市si5 识si6」×10遍；手机录音对比纠音。"],
+    ["声调攻坚","易混调对练（1vs4、2vs5、3vs6）；手势辅助发音；启动50个高频词（你好nei5 hou2／早晨／唔该／几多钱）。"],
+    ["高频词200句","数字、时间、方向词；粤语儿歌磨耳（《何家公鸡何家猜》）；录音自查声调节拍。"],
+    ["场景①打招呼","自我介绍模板背到脱口而出；绕口令正音「鸡龟骨滚羹」；B站粤语动画跟读10分钟。"],
+    ["场景②饮茶","早茶四大天王：虾饺haa1 gaau2／烧卖siu1 maai2／凤爪fung6 zaau2／排骨paai4 gwat1；模拟点餐对话。"],
+    ["场景③购物问路","几多钱／点去／唔该借歪；语气词「嘅／咗／喺」用法；角色扮演对话录音。"],
+    ["语法骨架","时态助词：咗(完成)／紧(进行)／过(经历)；粤语量词与普通话差异；句末语气词三连。"],
+    ["煲剧学习法","TVB《爱回家》1集：第1遍粤语字幕→第2遍无字幕→第3遍跟读台词；摘5句入库。"],
+    ["场景④职场","工作日常对话模板；粤语新闻影子跟读10分钟；词汇本累计300词。"],
+    ["场景⑤社交","电话用语／闲聊开场；歇后语与地道表达5条；用粤语描述今天发生的事（自言自语2分钟）。"],
+    ["实战周","HelloTalk或语伴真实对话2次；全程录音，回听标3个发音问题；词汇冲刺至400词。"],
+    ["综合验收","无字幕看粤语短视频自测理解率；录3分钟自我介绍；复盘12周，定下一阶段（正字书写/深入语法）。"]]},
+  eng:{name:"英语口语",cls:"t-eng",color:"var(--eng)",slot:"早晨语言块 · 20分钟",goal:"12周Shadowing训练：从卡顿到连续3分钟流利输出",
+    weeks:[
+    ["Shadowing入门Ⅰ","选60-90秒清晰素材（TED Ideas/BBC 6 Minute）；先听1遍→延迟0.5秒跟读5遍；追语调节奏不追每字；录音基线存档。"],
+    ["Shadowing入门Ⅱ","同素材重复到不用「想」就能跟上（5-10遍）；换第2段素材；本周观察连读：pick it up→pickit up。"],
+    ["Shadowing入门Ⅲ","尝试脱稿跟读已练素材；学缩读：wanna/gonna/hafta；录第3周音，与基线对比。"],
+    ["词块建库Ⅰ","每天收5个高频词块（That makes sense.／Let me think about that.）；录入本页间隔复习；继续shadowing并标记素材中的词块。"],
+    ["词块建库Ⅱ","词块库累计50个；功能词弱化：can/kən/、for/fər/；周末对录音机说2分钟（主题：我的工作）。"],
+    ["词块建库Ⅲ","词块库累计75个；跟读提速到原速；周末2分钟口说（主题：一次旅行），回听标卡顿点。"],
+    ["主题输出Ⅰ","选1话题备10个词块；每天3分钟计时口说，不停顿不重来；口说后把新卡壳的表达补进库。"],
+    ["主题输出Ⅱ","换第2个话题（时事/科技）；继续3分钟计时；shadowing素材升级到自然语速对话。"],
+    ["主题输出Ⅲ","第3个话题（观点辩论：AI利弊，正反各30秒）；训练快速组织语言；周素材复听自测。"],
+    ["真实对话Ⅰ","每周2次真人/AI对话（ChatGPT语音/ELSA/外师）；课前准备本周词块，课后记录3个自然表达入库。"],
+    ["真实对话Ⅱ","对话中刻意使用词块库表达；训练「用描述代替生词」的救场策略；继续计时口说。"],
+    ["综合验收","录一段3分钟即兴演讲；与第1周基线对比；用 Speak & Improve（剑桥）测一次级别；定下一阶段。"]]},
+  swim:{name:"游泳",cls:"t-swim",color:"var(--swim)",slot:"游泳日（周二/四/六）· 45-60分钟",goal:"12周：连续游完400m，蛙泳自由泳双姿成型",
+    weeks:[
+    ["水性适应","浅水区行走；脸入水鼻吐泡泡20次×3组；扶壁漂浮找「一」字水感。下水前热身5分钟，先用水拍打胸背适应水温。"],
+    ["呼吸节奏","鼻吐嘴吸：水下匀速鼻吐气，出水「快准狠」1秒内吸完；扶板打腿30秒×5组：髋部发力、水花要小。"],
+    ["蛙泳腿分解","陆上模仿「收-翻-蹬-夹」→水中扶板蛙泳腿25m×4；主动勾脚翻腕，只蹬不夹=白费力气。"],
+    ["蛙泳手+配合","划手不过肩宽（划到腰会剧烈起伏）；掌心斜后方划至胸前抬头吸气；口诀：划手→收腿→蹬腿→滑行2秒。"],
+    ["蛙泳连贯","蛙泳25m×4-6趟，趟间休30秒；蹬夹后保持流线型滑行，默数1-2再划手；自由泳扶板打腿入门15分钟。"],
+    ["自由泳划臂","夹浮板划臂25m×4：入水前伸抱水→划到大腿侧再出水（中途抬臂=浪费半周期）；单臂分解左右各2趟。"],
+    ["侧头换气","转肩转头不抬头！仅露嘴部、耳朵半浸水；「3-2-3-2」呼吸练习4×50m；慢速自100m找节奏。"],
+    ["自由泳整合","25m→50m连贯；左右双侧换气；蛙自交替游，总距离600m。"],
+    ["间歇入门","快50m+慢100m×4组；心率控制在(220-年龄)的60-70%，能说话但略喘；动作松弛不费力为合格。"],
+    ["连续200m","慢速连续200m不中断（重完成不重速度）；池边转身练习；总距离800m。"],
+    ["间歇强化","50m冲刺×6-8组，组间休15秒；拍视频自查：换气是否抬头？划水是否到大腿？打腿是否髋驱动？"],
+    ["400m验收","连续游完400m；对比第1周录像；总结最弱环节（换气/打腿/耐力），定下周期目标。"]]},
+  photo:{name:"摄影",cls:"t-photo",color:"var(--photo)",slot:"晚间技能块A · 25分钟",goal:"12周：从会按快门到产出第一组可示人的作品集",
+    weeks:[
+    ["曝光三要素","光圈f/2.8·f/8·f/11同场景各1张对比虚化；快门1/1000 vs 1/30拍流水；ISO 100·800·3200对比噪点。结论写成知识块入库。"],
+    ["三大构图","三分法10张（主体放交叉点）／居中对称10张／引导线10张（道路栏杆走廊）。拍时先问：这张用哪种构图？"],
+    ["设备肌肉记忆","A档20张+S档20张不看菜单盲调参数；开启网格线；设置RAW+自动ISO(最低快门1/125)。"],
+    ["复习验收Ⅰ","固定场景拍10张：要求≥5张曝光准确+构图不歪+主体清晰；废片写一句问题分析。"],
+    ["光线方向","同一物体顺光/侧光/逆光各一组；人像三光位各一组；总结：哪种光有什么情绪？"],
+    ["阴天应对","阴天默认拍1张→曝光补偿+0.7再拍对比；改拍小局部特写而非大场景；后期提曝光+加对比补救。"],
+    ["夜景手持","物理防抖（夹肘/靠墙/连拍）5张→大光圈+ISO1600再5张对比；手机夜景模式试1次。"],
+    ["复习验收Ⅱ","一天挑战三场景：阴天室内+夜晚街景+晴天下午各10张；选最佳1张写参数复盘。"],
+    ["人像专题","50mm以上焦段+微微俯拍+侧光+被拍者侧身；给朋友拍一组让对方满意的成片。"],
+    ["街拍专题","选好背景蹲点等「决定性瞬间」；拍背影剪影（不拍脸自带故事感）；拍影子与细节特写；50选5。"],
+    ["审美库","每天存3张打动你的照片，问三问：哪里打动我／我能否复现／缺什么；累计20张分类，模仿拍1张。"],
+    ["作品集","选定最爱主题拍10张，曝光构图光线全到位；统一调色风格；发布出去（社媒/群聊）接受反馈。"]]},
+  edit:{name:"后期修图",cls:"t-edit",color:"var(--edit)",slot:"晚间技能块B · 25分钟",goal:"12周：LR调色→PS精修全流程，建立自己的风格预设",
+    weeks:[
+    ["工作流地基","RAW vs JPEG差异实测；LR导入→图库管理→选片快捷键(P/X)；建立自己的文件夹+命名规则。"],
+    ["直方图与曝光","看懂直方图；白平衡修正偏色；曝光/对比度调准；废片拯救练习3张。"],
+    ["影调四滑块","高光/阴影/白色/黑色分工；清晰度vs鲜艳度vs饱和度（别乱拉饱和！）；同图3种力度对比。"],
+    ["色调曲线","RGB曲线与通道曲线；调出文青风和电影感各1张；周复习：3张照片走完整基础流程。"],
+    ["HSL单色手术","色相/饱和度/明度分色调整；青橙色调实战；肤色保护练习（橙色明度决定肤色通透度）。"],
+    ["局部调整","渐变滤镜压天空／径向滤镜突出主体／调整画笔局部提亮；练习：让照片视线有焦点。"],
+    ["AI蒙版与画质","主体/天空自动选择；锐化输出设置；夜景降噪实战；前后对比图存档。"],
+    ["预设与风格","拆解一张喜欢的作品：逆向推出滑杆决策→存为自己的预设；批量同步一组照片；5张组图风格统一。"],
+    ["PS图层入门","图层/调整图层/混合模式；铁律：永远用调整图层，不碰原图（非破坏性）；Camera Raw滤镜。"],
+    ["修复工具组","污点修复/修补工具/仿制图章/内容感知填充；去除路人杂物实战3张。"],
+    ["人像精修","磨皮（高斯模糊+蒙版找回质感）／液化微调／减淡加深雕塑面部光影；锐化只给眼睛头发。"],
+    ["全流程验收","3张照片走完 LR调色→PS精修→按用途导出（社媒1080p/打印300dpi）；对比第1周作品，写进步清单。"]]}
+};
+/* 每日公共任务（科学原理骨架） */
+const CORE = {
+  morningExtract:"🖊 主动提取5分钟：合上书/不看稿，默写昨天学的3个要点，再对照补漏（髓鞘化的关键动作）",
+  commute:"🎧 碎片沉浸（通勤/排队）：粤语歌单或英语播客当背景音，不考核，只泡耳朵",
+  feynman:"🗣 费曼复盘10分钟：挑今天一个卡点，不用术语讲清楚→找断裂点→补漏→重讲一遍",
+  srs:"🧠 间隔复习：打开「间隔复习」页清空今日到期卡片（先回忆再对照！）",
+  newchunk:"📥 入库：把今天学的最小知识块（1-3条）录入间隔复习系统",
+  sleep:"😴 睡前1小时不学新内容；23:30前睡，保证7-8小时（记忆在睡眠里被加固）"
+};
+const SWIM_DAYS = [2,4,6]; /* 周二/四/六 */
+const CHEERS = [
+  "✅ 漂亮！髓鞘又厚了一层。","🔥 这一步，大脑记住了。","💪 做到了！庆祝是成功回路的焊点。",
+  "⭐ 又提取了一次，胜过读十遍。","🖤 连续记录守护者+1。","🎯 小而确定的胜利，正是复利的本金。"
+];
+
+/* ============ 状态 ============ */
+const LS_KEY = "fiveDimLearningOS_v1";
+let S = load();
+function load(){
+  try{ const s = JSON.parse(localStorage.getItem(LS_KEY)); if(s&&s.start) return s; }catch(e){}
+  return { start: todayStr(), checks:{}, srs:[], reviews:{}, streak:0, lastDoneDay:null };
+}
+function save(){ localStorage.setItem(LS_KEY, JSON.stringify(S)); }
+function todayStr(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function dayNum(){ return Math.max(1, Math.floor((new Date(todayStr()) - new Date(S.start))/86400000)+1); }
+function weekNum(){ return Math.min(12, Math.ceil(dayNum()/7)); }
+function esc(s){ return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
+function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show");
+  clearTimeout(t._tm); t._tm=setTimeout(()=>t.classList.remove("show"),2200); }
+
+/* ============ 今日作战 ============ */
+function buildToday(){
+  const dn=dayNum(), wk=weekNum(), dow=new Date().getDay(), isSwim=SWIM_DAYS.includes(dow);
+  document.getElementById("todayTitle").textContent = "Day "+dn+" ｜ 第"+wk+"周 ｜ "+todayStr()+(isSwim?" ｜ 🏊 游泳日":"");
+  document.getElementById("todaySub").textContent = "今日架构：早晨语言输入（高能量）→ 白天沉浸 → 晚间技能交错 → 费曼+复习收口";
+  /* 断档检测：昨天完成率<60%且不是开始日 */
+  const y = new Date(); y.setDate(y.getDate()-1);
+  const yStr = y.getFullYear()+"-"+String(y.getMonth()+1).padStart(2,"0")+"-"+String(y.getDate()).padStart(2,"0");
+  const yc = S.checks[yStr]; const yv = yc?Object.values(yc):[];
+  const yPct = yv.length? yv.filter(Boolean).length/yv.length : 0;
+  const missed = dayNum()>1 && yPct<0.6;
+  document.getElementById("missBanner").style.display = missed?"flex":"none";
+  document.getElementById("okBanner").style.display = missed?"none":"flex";
+
+  const blocks = [
+    { id:"b1", time:"06:50-07:40", title:"☀️ 早晨语言块（高能量×语言输入）", window:[6,10],
+      fallback:"保底版：英语跟读1分钟 + 粤语说1句 + 默写1个要点（3分钟，做了就算赢）",
+      tasks:[
+        {dom:"eng", txt:"英语 W"+wk+"「"+DOMS.eng.weeks[wk-1][0]+"」："+DOMS.eng.weeks[wk-1][1]},
+        {dom:"cantonese", txt:"粤语 W"+wk+"「"+DOMS.cantonese.weeks[wk-1][0]+"」："+DOMS.cantonese.weeks[wk-1][1]},
+        {dom:"sys", txt:CORE.morningExtract}
+      ], tip:"锚点绑定：早餐后立刻开始，不等状态。跟读必须录音——没有录音对比就没有客观反馈。"},
+    { id:"b2", time:"全天碎片", title:"🎧 沉浸背景音（可选，不考核）", window:null,
+      fallback:null,
+      tasks:[{dom:"sys", txt:CORE.commute}], tip:"语感是泡出来的。粤语本周主题相关素材 / 英语EnglishPod、TED。"},
+    isSwim ? { id:"b3", time:"19:00-20:00", title:"🏊 游泳训练（周二/四/六）", window:[17,21],
+      fallback:"保底版：去不了泳池？陆上模仿10分钟（蛙泳收翻蹬夹 / 自由泳转体换气）",
+      tasks:[{dom:"swim", txt:"游泳 W"+wk+"「"+DOMS.swim.weeks[wk-1][0]+"」："+DOMS.swim.weeks[wk-1][1]},
+             {dom:"sys", txt:"下水前热身5分钟到微汗+用水拍胸背适应水温；游后拉筋+补蛋白质"}],
+      tip:"训练结构：10分钟热身慢游→25分钟分解练习→15-25分钟连贯游。动作不变形>距离>速度。呛水根源=抬头换气，改转肩转头。"}
+    : { id:"b3", time:"19:00-19:30", title:"🏊 非游泳日 · 游泳陆地辅助（可选）", window:null,
+      fallback:null,
+      tasks:[{dom:"swim", txt:"陆上模仿练习10分钟：蛙泳腿「收翻蹬夹」/ 自由泳转体换气（本周主题配套）"}],
+      tip:"肌肉记忆在陆地上也能练。明天游泳日带着今天要点下水。"},
+    { id:"b4", time:isSwim?"20:30-21:20":"19:30-20:40", title:"🌆 晚间技能块（摄影×后期 交错练习）", window:[19,22],
+      fallback:"保底版：用手机拍1张+修1张（5分钟，保持手感不断线）",
+      tasks:[
+        {dom:"photo", txt:"摄影 W"+wk+"「"+DOMS.photo.weeks[wk-1][0]+"」："+DOMS.photo.weeks[wk-1][1]},
+        {dom:"edit", txt:"后期 W"+wk+"「"+DOMS.edit.weeks[wk-1][0]+"」："+DOMS.edit.weeks[wk-1][1]},
+        {dom:"sys", txt:"📸 每日极简打卡：拍/修完写1条「问题+改进」复盘（一句话即可）"}
+      ], tip:"交错练习：拍→修→再拍，让前期参数和后期救场互相验证。每完成一张写一句本质分析。"},
+    { id:"b5", time:"21:20-21:45", title:"🌙 收口仪式（费曼+复习+入库）", window:[20,23],
+      fallback:"保底版：只清3张复习卡（2分钟，海马体需要你出现）",
+      tasks:[
+        {dom:"sys", txt:CORE.feynman},
+        {dom:"sys", txt:CORE.newchunk},
+        {dom:"sys", txt:CORE.srs}
+      ], tip:"费曼讲不下去的地方，就是明天要补的洞。别让今天的知识裸奔过夜。"}
+  ];
+  const el = document.getElementById("todayBlocks");
+  el.innerHTML = "";
+  const h = new Date().getHours();
+  blocks.forEach(b=>{
+    const now = b.window && h>=b.window[0] && h<b.window[1];
+    const div = document.createElement("div");
+    div.className = "tblock"+(now?" now":"");
+    div.innerHTML = '<div class="tb-head"><span class="tb-time">'+b.time+'</span><span class="tb-title">'+b.title+'</span><span class="tb-now">现在该做</span></div>'+
+      b.tasks.map((t,i)=>taskRow(b.id+"_"+i, t.dom, t.txt)).join("")+
+      (b.fallback?'<div class="fallback">🆘 '+b.fallback+'</div>':"")+
+      (b.tip?'<div class="tip">💡 '+b.tip+'</div>':"");
+    el.appendChild(div);
+  });
+  const bed = document.getElementById("bedTasks");
+  bed.innerHTML = taskRow("bed_0","sys",CORE.sleep)+taskRow("bed_1","sys","🧠 脑中过电影：今天五域各学了什么？（轻度回忆，不翻书，然后放下手机）");
+  refreshChecks();
+}
+
+function taskRow(id, dom, txt){
+  const d = DOMS[dom];
+  const tag = d?'<span class="tag '+d.cls+'">'+d.name+'</span>':'<span class="tag t-sys">系统</span>';
+  return '<label class="task" id="row_'+id+'"><input type="checkbox" data-tid="'+id+'" onchange="onCheck(this)"><span class="t-body">'+tag+txt+'</span></label>';
+}
+function onCheck(cb){
+  const day = todayStr();
+  if(!S.checks[day]) S.checks[day]={};
+  S.checks[day][cb.dataset.tid] = cb.checked;
+  save(); refreshChecks(); updateStreak(); renderHeader();
+  if(cb.checked){
+    /* 福格：完成后立刻庆祝 */
+    const blockId = cb.dataset.tid.split("_")[0];
+    const boxes = document.querySelectorAll('#tab-today input[data-tid^="'+blockId+'_"]');
+    const allDone = boxes.length>0 && Array.from(boxes).every(x=>x.checked);
+    toast(allDone? "🎉 整个时间块拿下！"+CHEERS[Math.floor(Math.random()*CHEERS.length)] : CHEERS[Math.floor(Math.random()*CHEERS.length)]);
+  }
+}
+function refreshChecks(){
+  const day = todayStr(); const c = S.checks[day]||{};
+  let total=0, done=0;
+  document.querySelectorAll("#tab-today input[type=checkbox]").forEach(cb=>{
+    const on = !!c[cb.dataset.tid];
+    cb.checked = on;
+    document.getElementById("row_"+cb.dataset.tid).classList.toggle("done", on);
+    total++; if(on) done++;
+  });
+  const pct = total? Math.round(done/total*100):0;
+  document.getElementById("stDone").textContent = pct+"%";
+  document.getElementById("ringFg").style.strokeDashoffset = 163.4*(1-pct/100);
+  if(pct===100 && total>0) toast("🏆 今日全清！睡前安心过电影，明天见。");
+}
+function updateStreak(){
+  const day = todayStr(); const c = S.checks[day]||{};
+  const vals = Object.values(c); const pct = vals.length? vals.filter(Boolean).length/vals.length:0;
+  if(pct>=0.6){
+    const y = new Date(); y.setDate(y.getDate()-1);
+    const yStr = y.getFullYear()+"-"+String(y.getMonth()+1).padStart(2,"0")+"-"+String(y.getDate()).padStart(2,"0");
+    if(S.lastDoneDay!==day){
+      S.streak = (S.lastDoneDay===yStr||S.streak===0)? S.streak+1 : 1;
+      S.lastDoneDay = day; save();
+    }
+  }
+}
+
+/* ============ 路线图 ============ */
+function buildRoad(){
+  const wk = weekNum();
+  let html = '<div class="card"><h3>🗺 90天总路线（当前第 '+wk+' 周）</h3><div class="mini">五域并行，每周每域一个主题。顺序比速度重要：漏了一天，周末补上，不要跳周。金色高亮=当前周，灰色=已完成周。</div></div>';
+  Object.keys(DOMS).forEach(k=>{
+    const d = DOMS[k];
+    html += '<div class="domain-head"><span class="dot" style="background:'+d.color+'"></span><h3>'+d.name+'</h3><span class="goal">'+d.goal+' ｜ '+d.slot+'</span></div><div class="weekgrid">';
+    d.weeks.forEach((w,i)=>{
+      const cls = (i+1<wk)?"past":(i+1===wk?"cur":"");
+      html += '<div class="week '+cls+'"><div class="wk">WEEK '+(i+1)+'</div><div class="wt">'+w[0]+'</div><div class="wd">'+w[1]+'</div></div>';
+    });
+    html += '</div>';
+  });
+  document.getElementById("tab-road").innerHTML = html;
+}
+
+/* ============ SRS ============ */
+const INTERVALS = [1,3,7,21,60];
+function addSrs(){
+  const f = document.getElementById("srsFront").value.trim();
+  if(!f) return;
+  S.srs.push({ id:Date.now(), dom:document.getElementById("srsDomain").value, front:f,
+    note:document.getElementById("srsNote").value.trim(), stage:0,
+    due: addDays(todayStr(),1), added: todayStr() });
+  document.getElementById("srsFront").value=""; document.getElementById("srsNote").value="";
+  save(); renderSrs(); renderHeader(); toast("📥 已入库，明天第一次提取。");
+}
+function addDays(str,n){ const d=new Date(str); d.setDate(d.getDate()+n);
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function gradeSrs(id,g){
+  const it = S.srs.find(x=>x.id===id); if(!it) return;
+  if(g==="ok"){ it.stage=Math.min(INTERVALS.length-1, it.stage+1); it.due=addDays(todayStr(),INTERVALS[it.stage]); }
+  else if(g==="mid"){ it.due=addDays(todayStr(),1); }
+  else { it.stage=0; it.due=addDays(todayStr(),1); }
+  save(); renderSrs(); renderHeader();
+  if(g==="ok") toast(CHEERS[Math.floor(Math.random()*CHEERS.length)]);
+}
+function delSrs(id){ S.srs = S.srs.filter(x=>x.id!==id); save(); renderSrs(); renderHeader(); }
+function toggleNote(id){ const n=document.getElementById("note_"+id); if(n) n.style.display = n.style.display==="none"?"block":"none"; }
+function renderSrs(){
+  const t = todayStr();
+  const due = S.srs.filter(x=>x.due<=t).sort((a,b)=>a.due<b.due?-1:1);
+  const rest = S.srs.filter(x=>x.due>t).sort((a,b)=>a.due<b.due?-1:1);
+  document.getElementById("srsDueCount").textContent = due.length+" 条";
+  document.getElementById("srsAllCount").textContent = S.srs.length+" 条";
+  document.getElementById("srsDue").innerHTML = due.length? due.map(it=>srsRow(it,true)).join("") : '<div class="mini">🎉 今日到期已全部清空。记住：先回忆再对照，回忆不起来再点「看答案」。</div>';
+  document.getElementById("srsAll").innerHTML = rest.length? rest.map(it=>srsRow(it,false)).join("") : '<div class="mini">暂无待排期卡片。</div>';
+}
+function srsRow(it, isDue){
+  const d = DOMS[it.dom];
+  return '<div class="srs-item"><span class="tag '+(d?d.cls:"t-sys")+'">'+(d?d.name:"")+'</span>'+
+    '<span class="srs-meta">阶段 '+it.stage+'/'+(INTERVALS.length-1)+' ｜ 下次 '+it.due+'</span>'+
+    '<div class="sf">'+esc(it.front)+'</div>'+
+    (it.note?'<div class="sn" id="note_'+it.id+'" style="display:'+(isDue?"none":"block")+'">'+esc(it.note)+'</div>':"")+
+    (isDue?'<div class="ops">'+(it.note?'<button onclick="toggleNote('+it.id+')">👁 看答案</button>':"")+
+      '<button class="ok" onclick="gradeSrs('+it.id+',\'ok\')">✓ 记住了 →'+INTERVALS[it.stage]+'天后</button>'+
+      '<button class="mid" onclick="gradeSrs('+it.id+',\'mid\')">~ 模糊 →明天</button>'+
+      '<button class="bad" onclick="gradeSrs('+it.id+',\'bad\')">✗ 忘了 →重来</button></div>'
+    :'<div class="ops"><button onclick="delSrs('+it.id+')" style="color:#b04a4a">删除</button></div>')+'</div>';
+}
+
+/* ============ 攻略库 ============ */
+const AI_PROMPT = "You are my English speaking coach. Rules:\n1. Have a natural conversation with me about [今日话题].\n2. After each of my replies, first respond naturally, then list my grammar/word-choice errors with corrections in brackets.\n3. If I get stuck, give me a hint sentence to continue, don't switch to Chinese.\n4. Every 5 turns, teach me 3 natural chunks natives would use in this context.\n5. Keep your sentences at intermediate level, speak at normal speed.";
+function copyPrompt(){
+  const done = ()=>toast("📋 提示词已复制，粘贴给任意AI语音助手即可开课");
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(AI_PROMPT).then(done).catch(()=>fallbackCopy(done)); } else fallbackCopy(done);
+}
+function fallbackCopy(done){ const ta=document.createElement("textarea"); ta.value=AI_PROMPT; document.body.appendChild(ta); ta.select(); try{document.execCommand("copy");}catch(e){} document.body.removeChild(ta); done(); }
+function buildGuide(){
+  const G = [
+   {dom:"sys",title:"⚓ 福格行为模型实战配置（让系统自己能坚持）",open:true,body:
+    '<ul><li><b>公式 B=MAP</b>：行为=动机×能力×提示。动机波动最大、最不可靠——失败时别骂自己懒，去改「能力」（缩小行为）和「提示」（设计触发）。</li>'+
+    '<li><b>锚点绑定配方</b>：「在我【旧习惯】之后，我会【微行为】」——早餐后→打开本页做英语跟读；到家换鞋后→相机拿上手；手机充上电→清复习卡。</li>'+
+    '<li><b>保底版机制</b>：每个时间块都有🆘保底版（1-5分钟），忙到爆炸也要做掉——完成极小行为积累的是「成功感」，那才是坚持的燃料；反复失败只会强化「我不行」。</li>'+
+    '<li><b>庆祝</b>：打卡后系统会弹出庆祝语——别嫌幼稚，即时积极情绪是让大脑记住新回路的关键焊点。</li>'+
+    '<li><b>绝不错过两次</b>：断档一天系统会亮警告条。断档一天是意外，断档两天是新（坏）习惯的开始。</li></ul>'},
+   {dom:"cantonese",title:"🗣 粤语实战攻略（2025工具更新）",body:
+    '<ul><li><b>发音优先</b>：先粤拼+六调，再词汇。绕口令「鸡龟骨滚羹」正音。误区：只用罗马拼音标注会导致发音畸形。</li>'+
+    '<li><b>煲剧三步法</b>：TVB《爱回家》每集200+生活句——粤语字幕→无字幕→跟读，一集三遍胜过三集一遍。</li>'+
+    '<li><b>跟唱纠调</b>：连续跟唱30首粤语歌（陈奕迅《富士山下》、许冠杰），声调准确率显著提升。</li>'+
+    '<li><b>APP矩阵</b>：<span class="pill">羊羊粤语（查词发音）</span><span class="pill">粤知音（汉粤互查+游戏）</span><span class="pill">港剧粤语学习（跟剧学）</span><span class="pill">粤语U学院（AI评分）</span><span class="pill">Memrise（母语者视频+间隔重复）</span><span class="pill">CantoneseClass101（系统播客课）</span><span class="pill">Pleco粤语词典</span><span class="pill">HelloTalk/Tandem（语伴）</span></li>'+
+    '<li><b>高频先行</b>：先拿下200句高频对话（问候/饮食/交通/购物），每天30分钟，2-3个月可基础交流。</li>'+
+    '<li><b>避坑</b>：❌模仿黑帮台词 ❌不敢开口（90%学习者最大障碍）❌只学口语不学正字</li></ul>'+
+    '<table><tr><th>调</th><th>1阴平</th><th>2阴上</th><th>3阴去</th><th>4阳平</th><th>5阳上</th><th>6阳去</th></tr>'+
+    '<tr><td>例字</td><td>诗 si1</td><td>史 si2</td><td>试 si3</td><td>时 si4</td><td>市 si5</td><td>识 si6</td></tr>'+
+    '<tr><td>口诀</td><td colspan="6">三六调最易混（中平vs低平），手势辅助：1平→2升→3去→4低升→5低→6更低平</td></tr></table>'},
+   {dom:"eng",title:"🗽 英语口语攻略（Shadowing + AI陪练矩阵）",body:
+    '<ul><li><b>流利≠正确</b>：卡顿根源是「逐字组装」，母语者以词块(chunk)为单位输出。初中级先练流利度。</li>'+
+    '<li><b>Shadowing五步</b>：选60-90秒清晰素材→先听一遍→延迟0.5秒跟读（追语调不追字）→同段重复5-10遍→录音对比。研究：每天10-15分钟×6周即显著改善（Hamada 2016）。</li>'+
+    '<li><b>词块法</b>：每周一主题收10-15个词块，入间隔复习，跟读时标记，对话时主动用。</li>'+
+    '<li><b>AI陪练矩阵（2025）</b>：<span class="pill">ELSA Speak（发音评分到音节级）</span><span class="pill">ChatGPT语音模式（自由对话+角色扮演）</span><span class="pill">Speak（AI教练纠错）</span><span class="pill">Loora（实时纠错陪练）</span><span class="pill">TalkPal</span><span class="pill">Cambly（真人）</span><span class="pill">YouGlish（查真实发音）</span><span class="pill">Speak &amp; Improve（剑桥免费定级）</span></li></ul>'+
+    '<b>AI口语教练提示词（复制即用）：</b><div class="copybox">'+esc(AI_PROMPT)+'</div><button class="cp" onclick="copyPrompt()">📋 复制提示词</button>'+
+    '<ul style="margin-top:6px"><li><b>素材</b>：<span class="pill">TED Talks</span><span class="pill">BBC 6 Minute</span><span class="pill">Rachel\'s English</span><span class="pill">EnglishPod</span><span class="pill">News in Levels</span>（能懂80%以上最佳）</li>'+
+    '<li><b>连读三规则</b>：辅音+元音连读(not at all→notat all)、缩读(wanna/gonna/hafta)、功能词弱化(can→/kən/, for→/fər/)。</li></ul>'},
+   {dom:"swim",title:"🏊 游泳训练攻略 + 常见错误自查表",body:
+    '<ul><li><b>每次训练结构</b>：10分钟热身慢游（先陆上拉伸到微汗+水拍胸背）→ 25分钟分解练习 → 15-25分钟连贯游+放松漂。动作不变形 > 距离 > 速度。</li>'+
+    '<li><b>呼吸铁律</b>：水下鼻匀速吐气，出水嘴「快准狠」1秒内吸完；犹豫拖沓=浪费换气窗口=呛水。</li></ul>'+
+    '<b>新手错误自查表（游完对照）：</b>'+
+    '<table><tr><th>错误</th><th>后果</th><th>纠正</th></tr>'+
+    '<tr><td>换气抬整个头/上半身</td><td>重心下沉→呛水→恶性循环</td><td>转肩转头仅露嘴，耳朵半浸水，头与脊椎一线</td></tr>'+
+    '<tr><td>憋气到憋不住才换</td><td>节奏大乱</td><td>水中匀速鼻吐气，划手顺势吸气</td></tr>'+
+    '<tr><td>蛙泳蹬腿不勾脚</td><td>只蹬不夹=白费力气</td><td>慢收腿、主动勾脚翻腕、快蹬夹、并拢伸直</td></tr>'+
+    '<tr><td>蛙泳划手过宽到腰</td><td>身体剧烈起伏增阻</td><td>外划到肩宽即内抱水，划至胸前</td></tr>'+
+    '<tr><td>自由泳划水半途出水</td><td>浪费半个划水周期</td><td>前伸抱水→一直划到大腿侧再提肘出水</td></tr>'+
+    '<tr><td>打腿靠小腿甩</td><td>费力效率低</td><td>髋部驱动、小腿放松、小幅高频、脚背绷直</td></tr>'+
+    '<tr><td>全身紧绷</td><td>僵硬的身体才会下沉</td><td>放松的人体天生能漂：沉肩、平颈、不攥拳</td></tr>'+
+    '<tr><td>不热身直接下水</td><td>抽筋首因</td><td>热身到微汗+冷水拍胸背适应水温</td></tr>'+
+    '<tr><td>不戴泳镜裸眼游</td><td>刺痛→慌乱→呛水</td><td>平价泳镜稳定心态，事半功倍</td></tr></table>'+
+    '<ul><li><b>省力核心</b>：减阻优先于力量——身体贴水、动作平直，比用力划水提升更明显。</li>'+
+    '<li><b>频率</b>：每周2-3次×45-60分钟；燃脂心率(220-年龄)×60-70%；游后补蛋白质修复效率高30%。</li>'+
+    '<li><b>安全</b>：不独自下水、不去野外水域、熟练前不逞强进深水区（水压压迫胸腔+加剧焦虑）。</li></ul>'},
+   {dom:"photo",title:"📷 摄影进阶攻略 + B站课程地图",body:
+    '<ul><li><b>顺序</b>：曝光三要素(第1月)→光线与场景(第2月)→主题与风格(第3月)。顺序比速度重要。</li>'+
+    '<li><b>三要素</b>：光圈控虚化/景深、快门控动静、ISO控噪点。先A档后S档再M档。</li>'+
+    '<li><b>构图</b>：三分法→引导线→框架→前景兴趣点→留白。一个主体用20种方式拍，第13-20张才是创造力开始的地方。</li>'+
+    '<li><b>每日极简打卡</b>：拍≥15张→精选3张→精修1张→写1条问题复盘。</li></ul>'+
+    '<b>B站免费课程地图（系统课优先）：</b>'+
+    '<table><tr><th>UP主</th><th>方向</th><th>推荐理由</th></tr>'+
+    '<tr><td>摄影师泰罗</td><td>系统课</td><td>《从零学摄影/用光/后期》三件套，逻辑清晰，小白搭建框架首选</td></tr>'+
+    '<tr><td>李涛PS</td><td>后期底层</td><td>《PS高手之路》基础+进阶，国内PS教学天花板</td></tr>'+
+    '<tr><td>Thomas看看世界</td><td>风光</td><td>国家地理冠军，青橙色调+风光后期，公众号可下素材跟练</td></tr>'+
+    '<tr><td>左手plus</td><td>教程+器材</td><td>《原来这么拍》400期，附参数方便模仿，培养参数敏感度</td></tr>'+
+    '<tr><td>HusseinsDrama</td><td>全能</td><td>教程/调色/Vlog/测评，讲解通俗有画面感</td></tr>'+
+    '<tr><td>林海音Haiyin</td><td>人像</td><td>明星摄影师，布光与拍摄引导</td></tr>'+
+    '<tr><td>王建章的摄影笔记</td><td>摄影眼</td><td>第一视角街拍讲解，训练在日常生活中发现画面</td></tr>'+
+    '<tr><td>吴晓隆</td><td>审美理论</td><td>华师大摄影教师，解读画册与影像思想，提升上限</td></tr></table>'+
+    '<ul><li><b>避坑</b>：三个月内别买新器材——你还没挖完现有设备的潜力；少看器材评测，防陷器材党泥潭。</li></ul>'},
+   {dom:"edit",title:"🎨 后期修图攻略 + 调色学习地图",body:
+    '<ul><li><b>先LR后PS</b>：90%的活在Lightroom干完（管理/曝光/调色/批量），精修（去杂物/磨皮/合成）才进Photoshop。</li>'+
+    '<li><b>修图顺序速查</b>：裁剪构图→曝光→白平衡→影调(高光阴影)→HSL→局部→锐化降噪→输出。修正曝光偏差&gt;色彩还原&gt;风格化。</li>'+
+    '<li><b>非破坏性铁律</b>：PS里永远用调整图层，绝不直接改原图层；拍RAW保留最大后期空间。</li>'+
+    '<li><b>风格化路径</b>：收藏喜欢的色调→逆向拆解滑杆决策→存为自己的预设→批量同步统一组图。</li></ul>'+
+    '<b>调色/后期UP主地图：</b>'+
+    '<table><tr><th>UP主</th><th>工具</th><th>方向</th></tr>'+
+    '<tr><td>摄影师泰罗</td><td>LR/PS</td><td>《从零学后期》，图层蒙版讲得最通俗</td></tr>'+
+    '<tr><td>青山摄影</td><td>LR</td><td>顶级摄影师作品仿色拆解，保姆级调色思路</td></tr>'+
+    '<tr><td>冯墨风</td><td>PS</td><td>日系空气感/影调曲线原理，专栏有图文版方便查</td></tr>'+
+    '<tr><td>摄影师逝水</td><td>PS</td><td>黑金/青橙/通道磨皮，附PSD可逐步复现</td></tr>'+
+    '<tr><td>李涛PS</td><td>PS</td><td>底层原理，看完对后期有全新理解</td></tr></table>'+
+    '<ul><li><b>避坑</b>：不过度修图（饱和拉满=廉价感）；手机端<span class="pill">醒图</span><span class="pill">Snapseed</span><span class="pill">Lightroom Mobile</span>同步练习；判断力优先——先看懂照片问题（曝光？白平衡？肤色脏？暗部死黑？主体不突出？），再选工具。</li></ul>'},
+   {dom:"sys",title:"⏰ 为什么这样安排一天？",body:
+    '<ul><li><b>早晨=语言</b>：精力最高峰给最需要专注的输入模仿；起床后先做5分钟昨日要点默写（间隔复习第一节点）。</li>'+
+    '<li><b>傍晚=身体</b>：游泳安排在下班后，体能训练与脑力学习交替，反而提升晚间效率。</li>'+
+    '<li><b>晚间=技能交错</b>：摄影和后期是同一闭环的两端（拍→修→再拍），交错练习让前期和后期互相验证。</li>'+
+    '<li><b>睡前=轻复习</b>：费曼收口+清空复习卡+脑中过电影；睡前1小时不学新内容，把巩固交给睡眠。</li>'+
+    '<li><b>每周日=复盘</b>：10分钟写四问复盘，调整下周策略。节奏：学习6天+复盘1天。</li></ul>'}
+  ];
+  document.getElementById("guideContent").innerHTML = G.map(g=>
+    '<details'+(g.open?" open":"")+'><summary><span class="tag '+(DOMS[g.dom]?DOMS[g.dom].cls:"t-sys")+'">'+(DOMS[g.dom]?DOMS[g.dom].name:"系统")+'</span>'+g.title+'</summary><div class="body">'+g.body+'</div></details>'
+  ).join("");
+}
+
+/* ============ 复盘 ============ */
+function weekKey(){ const d=new Date(); const o=new Date(d.getFullYear(),0,1);
+  const w = Math.ceil((((d-o)/86400000)+o.getDay()+1)/7); return d.getFullYear()+"-W"+String(w).padStart(2,"0"); }
+function saveReview(){
+  const k = weekKey();
+  S.reviews[k] = { q1:rq1v(), q2:rq2v(), q3:rq3v(), q4:rq4v(), saved:todayStr() };
+  save(); renderReview(); toast("✅ "+k+" 复盘已保存");
+}
+function rq1v(){return document.getElementById("rq1").value} function rq2v(){return document.getElementById("rq2").value}
+function rq3v(){return document.getElementById("rq3").value} function rq4v(){return document.getElementById("rq4").value}
+function renderReview(){
+  const k = weekKey();
+  document.getElementById("revWeekLabel").textContent = k;
+  const r = S.reviews[k];
+  if(r){ document.getElementById("rq1").value=r.q1||""; document.getElementById("rq2").value=r.q2||"";
+    document.getElementById("rq3").value=r.q3||""; document.getElementById("rq4").value=r.q4||""; }
+  const keys = Object.keys(S.reviews).sort().reverse();
+  document.getElementById("revHist").innerHTML = keys.length? keys.map(kk=>{
+    const x=S.reviews[kk];
+    return '<div class="rev-hist"><div class="rh-w">'+kk+'（保存于 '+x.saved+'）</div>'+
+      (x.q1?'<div>① '+esc(x.q1)+'</div>':"")+(x.q2?'<div>② '+esc(x.q2)+'</div>':"")+
+      (x.q3?'<div>③ '+esc(x.q3)+'</div>':"")+(x.q4?'<div>④ '+esc(x.q4)+'</div>':"")+'</div>';
+  }).join("") : '<div class="mini">还没有复盘记录。本周日晚写第一条。</div>';
+}
+
+/* ============ 数据 ============ */
+function exportData(){
+  const blob = new Blob([JSON.stringify(S,null,2)],{type:"application/json"});
+  const a = document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download="learning-os-backup-"+todayStr()+".json"; a.click();
+}
+function importData(){
+  const inp = document.createElement("input"); inp.type="file"; inp.accept=".json";
+  inp.onchange = ()=>{ const f=inp.files[0]; if(!f) return;
+    const r=new FileReader(); r.onload=()=>{ try{ S=JSON.parse(r.result); save(); location.reload(); }catch(e){ alert("文件格式错误"); } };
+    r.readAsText(f); };
+  inp.click();
+}
+function resetStart(){ if(confirm("把开始日期重置为今天？（打卡与复习数据保留）")){ S.start=todayStr(); save(); location.reload(); } }
+
+/* ============ 启动 ============ */
+function renderHeader(){
+  document.getElementById("stDay").textContent = Math.min(90,dayNum());
+  document.getElementById("stWeek").textContent = weekNum();
+  document.getElementById("stStreak").textContent = S.streak;
+  const t=todayStr();
+  document.getElementById("stSrs").textContent = S.srs.filter(x=>x.due<=t).length;
+}
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active")); t.classList.add("active");
+  ["today","road","srs","guide","review"].forEach(k=>document.getElementById("tab-"+k).style.display = k===t.dataset.tab?"block":"none");
+}));
+buildToday(); buildRoad(); renderSrs(); buildGuide(); renderReview(); updateStreak(); renderHeader();
+</script>
+</body>
+</html>

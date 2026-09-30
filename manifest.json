@@ -1,0 +1,14 @@
+{
+  "name": "五维学习作战系统",
+  "short_name": "学习作战",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f7f9",
+  "theme_color": "#1c2333",
+  "description": "粤语·游泳·摄影·后期·英语口语 每日学习系统",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

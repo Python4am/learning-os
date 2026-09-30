@@ -2,17 +2,25 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>五维学习作战系统 v2 · 粤语×游泳×摄影×后期×英语</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1c2333">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="学习作战">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+<title>五维学习作战系统 v3 · 粤语×游泳×摄影×后期×英语</title>
 <style>
 :root{
   --bg:#f6f7f9; --card:#ffffff; --ink:#1c2333; --sub:#6b7484; --line:#e6e9ef;
   --cantonese:#e8572a; --swim:#0e8fd6; --photo:#7c5cbf; --edit:#d6336c; --eng:#0f9d6c;
   --gold:#e6a817; --shadow:0 1px 3px rgba(20,30,60,.06),0 6px 18px rgba(20,30,60,.05);
 }
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:"PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
-.wrap{max-width:1060px;margin:0 auto;padding:20px 16px 80px}
+.wrap{max-width:1060px;margin:0 auto;padding:20px 16px 110px}
 /* header */
 .hero{background:linear-gradient(135deg,#1c2333 0%,#2c3a5e 100%);color:#fff;border-radius:18px;padding:26px 28px;box-shadow:var(--shadow);position:relative;overflow:hidden}
 .hero::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(230,168,23,.25),transparent 70%)}
@@ -25,23 +33,26 @@ body{font-family:"PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-se
 .banner{border-radius:12px;padding:12px 16px;margin-bottom:14px;font-size:13.5px;display:none;align-items:center;gap:10px}
 .banner.warn{display:flex;background:#fdf3e3;border:1px solid #f0d9a8;color:#8a6414}
 .banner.good{display:flex;background:#e8f7f0;border:1px solid #bfe6d4;color:#0f7a52}
+.banner.pwa{display:flex;background:#eef2fb;border:1px solid #cdd9f0;color:#33415e;justify-content:space-between}
+.banner.pwa button{border:none;background:var(--ink);color:#fff;border-radius:6px;padding:4px 12px;font-size:12px;cursor:pointer;flex-shrink:0}
 /* tabs */
 .tabs{display:flex;gap:8px;margin:20px 0 16px;flex-wrap:wrap}
-.tab{padding:9px 18px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:14px;cursor:pointer;color:var(--sub);transition:.15s;user-select:none}
+.tab{padding:9px 18px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:14px;cursor:pointer;color:var(--sub);transition:.15s;user-select:none;min-height:38px}
 .tab.active{background:var(--ink);color:#fff;border-color:var(--ink);font-weight:600}
 /* cards */
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:14px;box-shadow:var(--shadow)}
 .card h3{font-size:16px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
 /* time blocks */
 .tblock{border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden;background:#fff}
-.tblock .tb-head{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;user-select:none}
+.tblock .tb-head{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;user-select:none;flex-wrap:wrap}
 .tblock .tb-time{font-size:12px;color:var(--sub);background:var(--bg);border-radius:6px;padding:2px 8px;white-space:nowrap}
-.tblock .tb-title{font-weight:600;font-size:15px}
-.tblock .tb-now{margin-left:auto;font-size:11px;color:#fff;background:var(--gold);border-radius:999px;padding:2px 10px;display:none}
+.tblock .tb-title{font-weight:600;font-size:15px;flex:1;min-width:0}
+.tblock .tb-now{font-size:11px;color:#fff;background:var(--gold);border-radius:999px;padding:2px 10px;display:none;white-space:nowrap}
+.tblock .tb-timer{font-size:12px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 10px;white-space:nowrap;cursor:pointer}
 .tblock.now{border-color:var(--gold);box-shadow:0 0 0 2px rgba(230,168,23,.18)}
 .tblock.now .tb-now{display:inline-block}
 .task{display:flex;gap:10px;padding:10px 16px;border-top:1px dashed var(--line);align-items:flex-start}
-.task input{margin-top:6px;width:17px;height:17px;accent-color:var(--ink);cursor:pointer;flex-shrink:0}
+.task input{margin-top:6px;width:20px;height:20px;accent-color:var(--ink);cursor:pointer;flex-shrink:0}
 .task .t-body{flex:1;font-size:14px}
 .task.done .t-body{color:#a8b0bd;text-decoration:line-through}
 .tag{display:inline-block;font-size:11px;border-radius:4px;padding:0 6px;margin-right:6px;color:#fff;font-weight:600;vertical-align:1px}
@@ -54,8 +65,22 @@ body{font-family:"PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-se
 .ring .bgc{stroke:var(--line)}
 .ring .fgc{stroke:var(--gold);stroke-linecap:round;transition:stroke-dashoffset .5s}
 /* toast */
-#toast{position:fixed;left:50%;bottom:44px;transform:translateX(-50%) translateY(30px);background:var(--ink);color:#fff;padding:12px 22px;border-radius:999px;font-size:14px;opacity:0;transition:.35s;pointer-events:none;z-index:99;box-shadow:0 8px 30px rgba(0,0,0,.25);max-width:88vw;text-align:center}
+#toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%) translateY(30px);background:var(--ink);color:#fff;padding:12px 22px;border-radius:999px;font-size:14px;opacity:0;transition:.35s;pointer-events:none;z-index:99;box-shadow:0 8px 30px rgba(0,0,0,.25);max-width:88vw;text-align:center}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* timer */
+#fabTimer{position:fixed;right:18px;bottom:26px;width:56px;height:56px;border-radius:50%;background:var(--ink);color:#fff;border:none;font-size:22px;box-shadow:0 6px 20px rgba(20,30,60,.35);cursor:pointer;z-index:98}
+#fabTimer.running{background:var(--gold);animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 6px 20px rgba(230,168,23,.4)}50%{box-shadow:0 6px 28px rgba(230,168,23,.75)}}
+#timerPanel{position:fixed;right:18px;bottom:94px;width:280px;max-width:calc(100vw - 36px);background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 40px rgba(20,30,60,.22);padding:16px;display:none;z-index:98}
+#timerPanel.open{display:block}
+#timerPanel .tp-label{font-size:13px;color:var(--sub);margin-bottom:2px}
+#timerPanel .tp-clock{font-size:38px;font-weight:700;letter-spacing:2px;font-variant-numeric:tabular-nums;text-align:center;margin:4px 0 10px}
+#timerPanel .tp-ops{display:flex;gap:8px;justify-content:center}
+#timerPanel .tp-ops button{flex:1;padding:8px 0;border-radius:8px;border:1px solid var(--line);background:#fff;font-size:13px;cursor:pointer;font-family:inherit}
+#timerPanel .tp-ops .pri{background:var(--ink);color:#fff;border-color:var(--ink)}
+#timerPanel .tp-list{margin-top:12px;border-top:1px dashed var(--line);padding-top:10px;display:flex;flex-direction:column;gap:6px}
+#timerPanel .tp-item{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;cursor:pointer;background:var(--bg)}
+#timerPanel .tp-item span{color:var(--sub);font-size:12px}
 /* roadmap */
 .domain-head{display:flex;align-items:center;gap:10px;margin:22px 0 10px}
 .domain-head .dot{width:12px;height:12px;border-radius:4px}
@@ -69,6 +94,18 @@ body{font-family:"PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-se
 .week.cur{border-color:var(--gold);box-shadow:0 0 0 2px rgba(230,168,23,.2)}
 .week.cur .wk{color:var(--gold)}
 .week.past{opacity:.55}
+/* stats */
+.bars{display:flex;align-items:flex-end;gap:6px;height:120px;padding:8px 2px 0}
+.barcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
+.barcol .bar{width:100%;max-width:34px;border-radius:5px 5px 0 0;background:linear-gradient(180deg,var(--gold),#c98f0e);min-height:3px;transition:height .4s}
+.barcol .bar.empty{background:var(--line)}
+.barcol .bl{font-size:10px;color:var(--sub);white-space:nowrap}
+.barcol .bp{font-size:10px;color:var(--ink);font-weight:600}
+.domstat{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:13.5px}
+.domstat .dl{width:64px;font-weight:600;flex-shrink:0}
+.domstat .track{flex:1;height:10px;background:var(--bg);border-radius:99px;overflow:hidden}
+.domstat .fill{height:100%;border-radius:99px;transition:width .4s}
+.domstat .dv{font-size:12px;color:var(--sub);width:88px;text-align:right;white-space:nowrap;flex-shrink:0}
 /* srs */
 .srs-add{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
 .srs-add select,.srs-add input{padding:9px 12px;border:1px solid var(--line);border-radius:8px;font-size:13px;font-family:inherit}
@@ -79,7 +116,7 @@ button.act:hover{opacity:.85}
 .srs-item .sf{font-size:14.5px;font-weight:600}
 .srs-item .sn{font-size:12.5px;color:var(--sub);margin-top:3px;white-space:pre-wrap}
 .srs-item .ops{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap}
-.srs-item .ops button{padding:5px 14px;font-size:12px;border-radius:6px;border:1px solid var(--line);background:#fff;cursor:pointer;font-family:inherit}
+.srs-item .ops button{padding:8px 14px;font-size:12px;border-radius:6px;border:1px solid var(--line);background:#fff;cursor:pointer;font-family:inherit}
 .srs-item .ops .ok{background:var(--eng);color:#fff;border-color:var(--eng)}
 .srs-item .ops .mid{background:var(--gold);color:#fff;border-color:var(--gold)}
 .srs-item .ops .bad{background:#d64545;color:#fff;border-color:#d64545}
@@ -111,14 +148,22 @@ footer{margin-top:26px;text-align:center;font-size:12px;color:var(--sub)}
 .sci{border:1px solid var(--line);border-radius:10px;padding:13px 15px;background:#fff;font-size:13px}
 .sci b{font-size:13.5px}
 .sci p{color:var(--sub);font-size:12.5px;margin-top:3px}
-@media(max-width:640px){.hero h1{font-size:19px}.weekgrid{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){
+  .hero h1{font-size:19px}
+  .hero{padding:20px 18px}
+  .hero-stats{gap:16px}
+  .hstat .n{font-size:21px}
+  .weekgrid{grid-template-columns:1fr 1fr}
+  .tab{padding:8px 13px;font-size:13px}
+  .task .t-body{font-size:13.5px}
+}
 </style>
 </head>
 <body>
 <div class="wrap">
 
   <div class="hero">
-    <h1>五维学习作战系统 <span style="font-size:13px;opacity:.6">v2</span></h1>
+    <h1>五维学习作战系统 <span style="font-size:13px;opacity:.6">v3</span></h1>
     <div class="sub">粤语 · 游泳 · 摄影 · 后期 · 英语口语 ｜ 主动提取 × 间隔重复 × 交错练习 × 费曼 × 睡眠巩固 × 福格行为模型</div>
     <div class="hero-stats">
       <div class="hstat"><div class="n" id="stDay">1</div><div class="l">第几天 / 共90天</div></div>
@@ -131,16 +176,18 @@ footer{margin-top:26px;text-align:center;font-size:12px;color:var(--sub)}
 
   <div class="tabs" style="margin-top:20px">
     <div class="tab active" data-tab="today">📋 今日作战</div>
-    <div class="tab" data-tab="road">🗺 90天路线图</div>
+    <div class="tab" data-tab="stats">📊 数据</div>
+    <div class="tab" data-tab="road">🗺 路线图</div>
     <div class="tab" data-tab="srs">🧠 间隔复习</div>
-    <div class="tab" data-tab="guide">📚 攻略武器库</div>
-    <div class="tab" data-tab="review">🪞 每周复盘</div>
+    <div class="tab" data-tab="guide">📚 攻略库</div>
+    <div class="tab" data-tab="review">🪞 周复盘</div>
   </div>
 
   <!-- TODAY -->
   <div id="tab-today">
     <div class="banner warn" id="missBanner">⚠️ <b>昨天断档了。</b>铁律「绝不错过两次」：今天不求全做完，先把每个时间块的<b>保底版</b>做掉，守住连续。</div>
     <div class="banner good" id="okBanner">✅ 连续记录保持中。今天的目标不是完美，是<b>不断档</b>。</div>
+    <div class="banner pwa" id="pwaHint"><span>📲 加到主屏幕当 App 用：iPhone「分享→添加到主屏幕」/ 安卓「菜单→安装应用」。离线也能打开。</span><button onclick="dismissPwa()">知道了</button></div>
     <div class="card">
       <div class="daybar">
         <svg class="ring" width="64" height="64"><circle class="bgc" cx="32" cy="32" r="26" fill="none" stroke-width="7"/><circle class="fgc" id="ringFg" cx="32" cy="32" r="26" fill="none" stroke-width="7" stroke-dasharray="163.4" stroke-dashoffset="163.4"/></svg>
@@ -152,9 +199,23 @@ footer{margin-top:26px;text-align:center;font-size:12px;color:var(--sub)}
     </div>
     <div id="todayBlocks"></div>
     <div class="card">
-      <h3>🌙 睡前仪式（23:00前，约10分钟）</h3>
+      <h3>🌙 睡前仪式（23:00前，约10分钟）<span class="tb-timer" style="margin-left:auto" onclick="startTimer('bed','睡前仪式',10)">⏱ 10分钟</span></h3>
       <div class="mini" style="margin-bottom:8px">睡前1小时不摄入新内容——只做轻复习，把巩固交给睡眠（慢波睡眠搬运记忆，REM睡眠建立连接）。睡够7-8小时，是学习的后半段工程。</div>
       <div id="bedTasks"></div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div id="tab-stats" style="display:none">
+    <div class="card">
+      <h3>📊 近14天完成率</h3>
+      <div class="bars" id="bars14"></div>
+      <div class="mini" style="margin-top:6px">柱子=当天打卡完成率。≥60% 计入连续记录。</div>
+    </div>
+    <div class="card">
+      <h3>🎯 本周各域完成（周一至今天）</h3>
+      <div id="domStats"></div>
+      <div class="mini" style="margin-top:8px">哪一域明显偏科，周日复盘第①问就有素材了。</div>
     </div>
   </div>
 
@@ -205,7 +266,7 @@ footer{margin-top:26px;text-align:center;font-size:12px;color:var(--sub)}
     <div class="card">
       <h3>🪞 每周复盘 <span class="srs-meta" id="revWeekLabel"></span></h3>
       <div class="mini" style="margin-bottom:12px">每周日晚10分钟。复盘不是总结流水账，而是找断裂点、调下周策略。</div>
-      <div class="rev-q"><label>1️⃣ 本周五域各完成了几天？哪一域掉队了？（看打卡）</label><textarea id="rq1" placeholder="例：粤语7天全勤；游泳只去了1次，因为……"></textarea></div>
+      <div class="rev-q"><label>1️⃣ 本周五域各完成了几天？哪一域掉队了？（看「数据」页）</label><textarea id="rq1" placeholder="例：粤语7天全勤；游泳只去了1次，因为……"></textarea></div>
       <div class="rev-q"><label>2️⃣ 本周最大的一个突破（具体写出来）</label><textarea id="rq2" placeholder="例：自由泳第一次连续50m没停 / shadowing不用看稿跟上了"></textarea></div>
       <div class="rev-q"><label>3️⃣ 费曼测试：不用术语，讲清本周一个知识点。卡在哪？</label><textarea id="rq3" placeholder="讲不下去的地方就是下周要补的洞"></textarea></div>
       <div class="rev-q"><label>4️⃣ 下周一个调整动作（只写一个，可执行）</label><textarea id="rq4" placeholder="例：游泳改到早上人少时段 / 英语素材从BBC换成EnglishPod"></textarea></div>
@@ -221,6 +282,17 @@ footer{margin-top:26px;text-align:center;font-size:12px;color:var(--sub)}
     <a href="javascript:resetStart()" style="color:#b04a4a">重置开始日期</a></div>
     <div style="margin-top:6px">「让行为小到不可能失败，让成功立刻被感受到。」— 福格行为模型</div>
   </footer>
+</div>
+
+<button id="fabTimer" onclick="toggleTimerPanel()" title="计时器">⏱</button>
+<div id="timerPanel">
+  <div class="tp-label" id="tpLabel">选择下方时间块开始计时</div>
+  <div class="tp-clock" id="tpClock">--:--</div>
+  <div class="tp-ops">
+    <button class="pri" id="tpToggle" onclick="timerToggle()">开始</button>
+    <button onclick="timerReset()">重置</button>
+  </div>
+  <div class="tp-list" id="tpList"></div>
 </div>
 <div id="toast"></div>
 
@@ -312,6 +384,8 @@ const CHEERS = [
   "✅ 漂亮！髓鞘又厚了一层。","🔥 这一步，大脑记住了。","💪 做到了！庆祝是成功回路的焊点。",
   "⭐ 又提取了一次，胜过读十遍。","🖤 连续记录守护者+1。","🎯 小而确定的胜利，正是复利的本金。"
 ];
+/* 打卡任务 → 领域映射（用于周统计） */
+const TID_DOM = {"b1_0":"eng","b1_1":"cantonese","b3_0":"swim","b4_0":"photo","b4_1":"edit"};
 
 /* ============ 状态 ============ */
 const LS_KEY = "fiveDimLearningOS_v1";
@@ -321,12 +395,20 @@ function load(){
   return { start: todayStr(), checks:{}, srs:[], reviews:{}, streak:0, lastDoneDay:null };
 }
 function save(){ localStorage.setItem(LS_KEY, JSON.stringify(S)); }
-function todayStr(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function fmtDate(d){ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function todayStr(){ return fmtDate(new Date()); }
 function dayNum(){ return Math.max(1, Math.floor((new Date(todayStr()) - new Date(S.start))/86400000)+1); }
 function weekNum(){ return Math.min(12, Math.ceil(dayNum()/7)); }
 function esc(s){ return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
 function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show");
   clearTimeout(t._tm); t._tm=setTimeout(()=>t.classList.remove("show"),2200); }
+function dayPct(day){ /* 排除 __total 等元数据键 */
+  const c = S.checks[day]; if(!c) return 0;
+  let total=0, done=0;
+  Object.keys(c).forEach(k=>{ if(k.indexOf("__")===0) return; total++; if(c[k]) done++; });
+  const denom = c.__total || total;
+  return denom? done/denom : 0;
+}
 
 /* ============ 今日作战 ============ */
 function buildToday(){
@@ -335,41 +417,38 @@ function buildToday(){
   document.getElementById("todaySub").textContent = "今日架构：早晨语言输入（高能量）→ 白天沉浸 → 晚间技能交错 → 费曼+复习收口";
   /* 断档检测：昨天完成率<60%且不是开始日 */
   const y = new Date(); y.setDate(y.getDate()-1);
-  const yStr = y.getFullYear()+"-"+String(y.getMonth()+1).padStart(2,"0")+"-"+String(y.getDate()).padStart(2,"0");
-  const yc = S.checks[yStr]; const yv = yc?Object.values(yc):[];
-  const yPct = yv.length? yv.filter(Boolean).length/yv.length : 0;
-  const missed = dayNum()>1 && yPct<0.6;
+  const missed = dayNum()>1 && dayPct(fmtDate(y))<0.6;
   document.getElementById("missBanner").style.display = missed?"flex":"none";
   document.getElementById("okBanner").style.display = missed?"none":"flex";
 
   const blocks = [
-    { id:"b1", time:"06:50-07:40", title:"☀️ 早晨语言块（高能量×语言输入）", window:[6,10],
+    { id:"b1", time:"06:50-07:40", title:"☀️ 早晨语言块（高能量×语言输入）", short:"早晨语言块", window:[6,10], timer:45,
       fallback:"保底版：英语跟读1分钟 + 粤语说1句 + 默写1个要点（3分钟，做了就算赢）",
       tasks:[
         {dom:"eng", txt:"英语 W"+wk+"「"+DOMS.eng.weeks[wk-1][0]+"」："+DOMS.eng.weeks[wk-1][1]},
         {dom:"cantonese", txt:"粤语 W"+wk+"「"+DOMS.cantonese.weeks[wk-1][0]+"」："+DOMS.cantonese.weeks[wk-1][1]},
         {dom:"sys", txt:CORE.morningExtract}
       ], tip:"锚点绑定：早餐后立刻开始，不等状态。跟读必须录音——没有录音对比就没有客观反馈。"},
-    { id:"b2", time:"全天碎片", title:"🎧 沉浸背景音（可选，不考核）", window:null,
+    { id:"b2", time:"全天碎片", title:"🎧 沉浸背景音（可选，不考核）", short:"沉浸背景音", window:null, timer:0,
       fallback:null,
       tasks:[{dom:"sys", txt:CORE.commute}], tip:"语感是泡出来的。粤语本周主题相关素材 / 英语EnglishPod、TED。"},
-    isSwim ? { id:"b3", time:"19:00-20:00", title:"🏊 游泳训练（周二/四/六）", window:[17,21],
+    isSwim ? { id:"b3", time:"19:00-20:00", title:"🏊 游泳训练（周二/四/六）", short:"游泳训练", window:[17,21], timer:60,
       fallback:"保底版：去不了泳池？陆上模仿10分钟（蛙泳收翻蹬夹 / 自由泳转体换气）",
       tasks:[{dom:"swim", txt:"游泳 W"+wk+"「"+DOMS.swim.weeks[wk-1][0]+"」："+DOMS.swim.weeks[wk-1][1]},
              {dom:"sys", txt:"下水前热身5分钟到微汗+用水拍胸背适应水温；游后拉筋+补蛋白质"}],
       tip:"训练结构：10分钟热身慢游→25分钟分解练习→15-25分钟连贯游。动作不变形>距离>速度。呛水根源=抬头换气，改转肩转头。"}
-    : { id:"b3", time:"19:00-19:30", title:"🏊 非游泳日 · 游泳陆地辅助（可选）", window:null,
+    : { id:"b3", time:"19:00-19:30", title:"🏊 非游泳日 · 游泳陆地辅助（可选）", short:"游泳陆地辅助", window:null, timer:20,
       fallback:null,
       tasks:[{dom:"swim", txt:"陆上模仿练习10分钟：蛙泳腿「收翻蹬夹」/ 自由泳转体换气（本周主题配套）"}],
       tip:"肌肉记忆在陆地上也能练。明天游泳日带着今天要点下水。"},
-    { id:"b4", time:isSwim?"20:30-21:20":"19:30-20:40", title:"🌆 晚间技能块（摄影×后期 交错练习）", window:[19,22],
+    { id:"b4", time:isSwim?"20:30-21:20":"19:30-20:40", title:"🌆 晚间技能块（摄影×后期 交错练习）", short:"晚间技能块", window:[19,22], timer:60,
       fallback:"保底版：用手机拍1张+修1张（5分钟，保持手感不断线）",
       tasks:[
         {dom:"photo", txt:"摄影 W"+wk+"「"+DOMS.photo.weeks[wk-1][0]+"」："+DOMS.photo.weeks[wk-1][1]},
         {dom:"edit", txt:"后期 W"+wk+"「"+DOMS.edit.weeks[wk-1][0]+"」："+DOMS.edit.weeks[wk-1][1]},
         {dom:"sys", txt:"📸 每日极简打卡：拍/修完写1条「问题+改进」复盘（一句话即可）"}
       ], tip:"交错练习：拍→修→再拍，让前期参数和后期救场互相验证。每完成一张写一句本质分析。"},
-    { id:"b5", time:"21:20-21:45", title:"🌙 收口仪式（费曼+复习+入库）", window:[20,23],
+    { id:"b5", time:"21:20-21:45", title:"🌙 收口仪式（费曼+复习+入库）", short:"收口仪式", window:[20,23], timer:25,
       fallback:"保底版：只清3张复习卡（2分钟，海马体需要你出现）",
       tasks:[
         {dom:"sys", txt:CORE.feynman},
@@ -384,14 +463,20 @@ function buildToday(){
     const now = b.window && h>=b.window[0] && h<b.window[1];
     const div = document.createElement("div");
     div.className = "tblock"+(now?" now":"");
-    div.innerHTML = '<div class="tb-head"><span class="tb-time">'+b.time+'</span><span class="tb-title">'+b.title+'</span><span class="tb-now">现在该做</span></div>'+
+    const timerBtn = b.timer? '<span class="tb-timer" data-bid="'+b.id+'" data-mins="'+b.timer+'" data-label="'+b.short+'">⏱ '+b.timer+'分钟</span>' : "";
+    div.innerHTML = '<div class="tb-head"><span class="tb-time">'+b.time+'</span><span class="tb-title">'+b.title+'</span><span class="tb-now">现在该做</span>'+timerBtn+'</div>'+
       b.tasks.map((t,i)=>taskRow(b.id+"_"+i, t.dom, t.txt)).join("")+
       (b.fallback?'<div class="fallback">🆘 '+b.fallback+'</div>':"")+
       (b.tip?'<div class="tip">💡 '+b.tip+'</div>':"");
     el.appendChild(div);
   });
+  el.querySelectorAll(".tb-timer").forEach(btn=>btn.addEventListener("click", ev=>{
+    ev.stopPropagation();
+    startTimer(btn.dataset.bid, btn.dataset.label, parseInt(btn.dataset.mins,10));
+  }));
   const bed = document.getElementById("bedTasks");
   bed.innerHTML = taskRow("bed_0","sys",CORE.sleep)+taskRow("bed_1","sys","🧠 脑中过电影：今天五域各学了什么？（轻度回忆，不翻书，然后放下手机）");
+  buildTimerList(blocks);
   refreshChecks();
 }
 
@@ -422,22 +507,123 @@ function refreshChecks(){
     document.getElementById("row_"+cb.dataset.tid).classList.toggle("done", on);
     total++; if(on) done++;
   });
+  if(!S.checks[day]) S.checks[day]={};
+  if(S.checks[day].__total!==total){ S.checks[day].__total=total; save(); }
   const pct = total? Math.round(done/total*100):0;
   document.getElementById("stDone").textContent = pct+"%";
   document.getElementById("ringFg").style.strokeDashoffset = 163.4*(1-pct/100);
   if(pct===100 && total>0) toast("🏆 今日全清！睡前安心过电影，明天见。");
 }
 function updateStreak(){
-  const day = todayStr(); const c = S.checks[day]||{};
-  const vals = Object.values(c); const pct = vals.length? vals.filter(Boolean).length/vals.length:0;
-  if(pct>=0.6){
+  const day = todayStr();
+  if(dayPct(day)>=0.6){
     const y = new Date(); y.setDate(y.getDate()-1);
-    const yStr = y.getFullYear()+"-"+String(y.getMonth()+1).padStart(2,"0")+"-"+String(y.getDate()).padStart(2,"0");
+    const yStr = fmtDate(y);
     if(S.lastDoneDay!==day){
       S.streak = (S.lastDoneDay===yStr||S.streak===0)? S.streak+1 : 1;
       S.lastDoneDay = day; save();
     }
   }
+}
+
+/* ============ 计时器 ============ */
+let TM = { left:0, total:0, label:"", running:false, iv:null };
+function toggleTimerPanel(){ document.getElementById("timerPanel").classList.toggle("open"); }
+function buildTimerList(blocks){
+  const list = document.getElementById("tpList");
+  const items = blocks.filter(b=>b.timer>0).map(b=>({id:b.id,label:b.short,mins:b.timer}));
+  items.push({id:"bed",label:"睡前仪式",mins:10});
+  list.innerHTML = items.map(it=>'<div class="tp-item" onclick="startTimer(\''+it.id+'\',\''+it.label+'\','+it.mins+')">'+it.label+'<span>'+it.mins+'分钟 ▶</span></div>').join("");
+}
+function startTimer(bid,label,mins){
+  clearInterval(TM.iv);
+  TM = { left:mins*60, total:mins*60, label:label, running:true, iv:null };
+  document.getElementById("timerPanel").classList.add("open");
+  document.getElementById("fabTimer").classList.add("running");
+  document.getElementById("tpToggle").textContent = "暂停";
+  tickRender();
+  TM.iv = setInterval(()=>{
+    TM.left--;
+    if(TM.left<=0){ timerDone(); return; }
+    tickRender();
+  },1000);
+}
+function tickRender(){
+  const m = Math.floor(TM.left/60), s = TM.left%60;
+  document.getElementById("tpClock").textContent = String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+  document.getElementById("tpLabel").textContent = "⏱ "+TM.label;
+  document.title = String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")+" · "+TM.label;
+}
+function timerToggle(){
+  if(!TM.total) return;
+  if(TM.running){ clearInterval(TM.iv); TM.running=false; document.getElementById("tpToggle").textContent="继续"; document.getElementById("fabTimer").classList.remove("running"); }
+  else { TM.running=true; document.getElementById("tpToggle").textContent="暂停"; document.getElementById("fabTimer").classList.add("running");
+    TM.iv=setInterval(()=>{ TM.left--; if(TM.left<=0){timerDone();return;} tickRender(); },1000); }
+}
+function timerReset(){
+  clearInterval(TM.iv); TM.running=false; TM.left=TM.total;
+  document.getElementById("tpToggle").textContent="开始";
+  document.getElementById("fabTimer").classList.remove("running");
+  if(TM.total) tickRender(); else { document.getElementById("tpClock").textContent="--:--"; document.getElementById("tpLabel").textContent="选择下方时间块开始计时"; document.title="五维学习作战系统 v3"; }
+}
+function timerDone(){
+  clearInterval(TM.iv); TM.running=false;
+  document.getElementById("tpToggle").textContent="开始";
+  document.getElementById("fabTimer").classList.remove("running");
+  document.title = "五维学习作战系统 v3";
+  beep(); toast("⏰ 「"+TM.label+"」时间到！打勾收工。");
+  document.getElementById("tpClock").textContent="00:00";
+}
+function beep(){
+  try{
+    const ctx = new (window.AudioContext||window.webkitAudioContext)();
+    [0,0.25,0.5].forEach(t=>{
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value = 880; o.type="sine";
+      g.gain.setValueAtTime(0.001, ctx.currentTime+t);
+      g.gain.exponentialRampToValueAtTime(0.3, ctx.currentTime+t+0.02);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+t+0.2);
+      o.start(ctx.currentTime+t); o.stop(ctx.currentTime+t+0.22);
+    });
+  }catch(e){}
+}
+/* PWA 提示 */
+function dismissPwa(){ S.pwaHintDismissed=true; save(); document.getElementById("pwaHint").style.display="none"; }
+function initPwaHint(){
+  const standalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone;
+  document.getElementById("pwaHint").style.display = (standalone || S.pwaHintDismissed) ? "none" : "flex";
+}
+
+/* ============ 数据统计 ============ */
+function buildStats(){
+  /* 近14天柱状图 */
+  let html = "";
+  for(let i=13;i>=0;i--){
+    const d = new Date(); d.setDate(d.getDate()-i);
+    const key = fmtDate(d);
+    const pct = Math.round(dayPct(key)*100);
+    const label = (i===0)?"今天":(d.getMonth()+1)+"/"+d.getDate();
+    html += '<div class="barcol"><div class="bp">'+(pct||"")+'</div><div class="bar'+(pct?"":" empty")+'" style="height:'+Math.max(3,pct)+'px" title="'+key+' '+pct+'%"></div><div class="bl">'+label+'</div></div>';
+  }
+  document.getElementById("bars14").innerHTML = html;
+  /* 本周各域 */
+  const now = new Date();
+  const monday = new Date(now); monday.setDate(now.getDate() - ((now.getDay()+6)%7));
+  const counts = {eng:0,cantonese:0,swim:0,photo:0,edit:0};
+  const totals = {eng:0,cantonese:0,swim:0,photo:0,edit:0};
+  for(let d=new Date(monday); d<=now; d.setDate(d.getDate()+1)){
+    const c = S.checks[fmtDate(d)]; if(!c) continue;
+    Object.keys(TID_DOM).forEach(tid=>{
+      const dom = TID_DOM[tid];
+      if(c[tid]!==undefined){ totals[dom]++; if(c[tid]) counts[dom]++; }
+    });
+  }
+  const colors = {eng:"var(--eng)",cantonese:"var(--cantonese)",swim:"var(--swim)",photo:"var(--photo)",edit:"var(--edit)"};
+  document.getElementById("domStats").innerHTML = Object.keys(counts).map(k=>{
+    const t = totals[k], n = counts[k], pct = t? Math.round(n/t*100):0;
+    return '<div class="domstat"><span class="dl">'+DOMS[k].name+'</span><div class="track"><div class="fill" style="width:'+pct+'%;background:'+colors[k]+'"></div></div><span class="dv">'+n+' / '+t+' 次 · '+pct+'%</span></div>';
+  }).join("");
 }
 
 /* ============ 路线图 ============ */
@@ -467,8 +653,7 @@ function addSrs(){
   document.getElementById("srsFront").value=""; document.getElementById("srsNote").value="";
   save(); renderSrs(); renderHeader(); toast("📥 已入库，明天第一次提取。");
 }
-function addDays(str,n){ const d=new Date(str); d.setDate(d.getDate()+n);
-  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function addDays(str,n){ const d=new Date(str); d.setDate(d.getDate()+n); return fmtDate(d); }
 function gradeSrs(id,g){
   const it = S.srs.find(x=>x.id===id); if(!it) return;
   if(g==="ok"){ it.stage=Math.min(INTERVALS.length-1, it.stage+1); it.due=addDays(todayStr(),INTERVALS[it.stage]); }
@@ -642,9 +827,13 @@ function renderHeader(){
 }
 document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
   document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active")); t.classList.add("active");
-  ["today","road","srs","guide","review"].forEach(k=>document.getElementById("tab-"+k).style.display = k===t.dataset.tab?"block":"none");
+  ["today","stats","road","srs","guide","review"].forEach(k=>document.getElementById("tab-"+k).style.display = k===t.dataset.tab?"block":"none");
+  if(t.dataset.tab==="stats") buildStats();
 }));
-buildToday(); buildRoad(); renderSrs(); buildGuide(); renderReview(); updateStreak(); renderHeader();
+buildToday(); buildRoad(); renderSrs(); buildGuide(); renderReview(); updateStreak(); renderHeader(); initPwaHint();
+if("serviceWorker" in navigator && location.protocol==="https:"){
+  navigator.serviceWorker.register("sw.js").catch(()=>{});
+}
 </script>
 </body>
 </html>
